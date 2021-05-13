@@ -189,22 +189,6 @@ FishUI.Window {
             }
         }
 
-//        ListView {
-//            Layout.fillWidth: true
-//            Layout.fillHeight: true
-//            model: 12
-//            delegate: calendarDateComponent
-//        }
-
-//        Component {
-//            id: calendarDateComponent
-//            CalendarDate {
-//                id: calendarDate
-//                Layout.fillHeight: true
-//                Layout.fillWidth: true
-//                listViewIndex: index
-//            }
-//        }
         CalendarDate {
             id: calendarDate
             Layout.fillHeight: true
