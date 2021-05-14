@@ -7,7 +7,7 @@ Item {
     id: item
     signal pressed (var comboboxNumber)
     signal yearPressed (var yearNumber)
-    property var comboboxIndex: 0
+    property int comboboxIndex: 0
     property int comboBoxMonthText: comboboxDate.displayText
     property int comboBoxYearCurrentIndex: 0
     RowLayout {
@@ -24,7 +24,7 @@ Item {
             }
 
             popup: Popup {
-                id: popupCom
+                id: yearPopup
                 y: parent.height - 6
                 padding: 1
                 height: 300
@@ -33,6 +33,27 @@ Item {
                 background: Rectangle {
                     color: "lightGrey"
                     radius: 5
+                }
+
+                enter: Transition {
+                    PropertyAnimation {
+                        target: yearPopup
+                        property: "height"
+                        from: 0
+                        to: 300
+                        duration: 300
+                    }
+
+                }
+
+                exit: Transition {
+                    PropertyAnimation {
+                        target: yearPopup
+                        property: "height"
+                        from: 300
+                        to: 0
+                        duration: 100
+                    }
                 }
 
                 ListView {
@@ -49,7 +70,7 @@ Item {
         Component {
             id: testComponent
             Rectangle {
-                width: popupCom.width
+                width: yearPopup.width
                 height: 40
                 color: mousePopup.pressed ? comboBoxTodayYear(1) : comboBoxTodayYear(2)
                 MouseArea {
@@ -93,6 +114,7 @@ Item {
             }
 
             popup: Popup {
+                id: monthPopup
                 y: parent.height - 6
                 width: parent.width
                 padding: 1
@@ -100,6 +122,26 @@ Item {
                 background: Rectangle {
                     radius: 5
                     color: "lightGrey"
+                }
+
+                enter: Transition {
+                    PropertyAnimation {
+                        target: monthPopup
+                        property: "height"
+                        from: 0
+                        to: 300
+                        duration: 300
+                    }
+                }
+
+                exit: Transition {
+                    PropertyAnimation {
+                        target: monthPopup
+                        property: "height"
+                        from: 300
+                        to: 0
+                        duration: 100
+                    }
                 }
 
                 ListView {

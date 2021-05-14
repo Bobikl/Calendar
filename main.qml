@@ -63,7 +63,7 @@ FishUI.Window {
     }
 
     function currentDateTime() {
-        return Qt.formatDateTime(new Date(), "yyyy-MM-dd hh:mm ddd");
+        return Qt.formatDateTime(new Date(), "yyyy-MM-dd hh:mm:ss ddd");
 }
     function currentDateTimeTest() {
         return Qt.formatDateTime(new Date(), "MM");
@@ -82,7 +82,6 @@ FishUI.Window {
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-//            timeText.text = Date().toString()
             timeText.text = currentDateTime()
             timeRunning()
         }
@@ -109,9 +108,17 @@ FishUI.Window {
                 calendarDate.interval(comboboxNumber)
                 calendarDate.lastMonth(comboboxNumber)
                 calendarDate.todayColor(comboboxNumber)
-                calendarDate.visible = false
-                calendarDate.visible = true
             }
+
+//            transitions: Transition {
+//                PropertyAnimation {
+//                    id: calendarDateTransition
+//                    target: calendarDate
+//                    property: "opacity"
+//                    to: 100
+//                }
+//            }
+
             onYearPressed: {
                 calendarDate.yaerToDateCalculation(yearNumber)
                 calendarDate.interval(comboBoxMonthText)
@@ -119,6 +126,8 @@ FishUI.Window {
                 calendarDate.visible = true
             }
         }
+
+
 
         RowLayout {
             height: 50

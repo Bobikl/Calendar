@@ -28,6 +28,14 @@ Item {
         clip: true
         cellWidth: parent.width / 7
         cellHeight: parent.height / 6
+        populate: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 800
+            }
+        }
     }
     Component {
         id: componentData
@@ -201,7 +209,6 @@ Item {
             } else {
                 yearTestNumber = 4 - temporaryDate
             }
-            console.log(yearTestNumber)
             addNumber = 1
         } else {
             yearTestNumber = 4
