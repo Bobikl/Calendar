@@ -62,7 +62,7 @@ FishUI.Window {
 //            console.log(getTimeDate.getTimeDateRet(Date().toString()))
             calendarDate.year = currentDateTimeTest()
             calendarDate.month = getTodayDate()
-            calendarDate.data = getTodatYear()
+            calendarDate.date = getTodatYear()
         }
     }
 
