@@ -96,6 +96,7 @@ Item {
             Layout.fillWidth: true
             currentIndex: comboboxIndex
             model: ListModel {
+                id: monthModel
                 ListElement { text: "1" }
                 ListElement { text: "2" }
                 ListElement { text: "3" }
@@ -159,6 +160,17 @@ Item {
             return "lightGrey"
         } else {
             return "white"
+        }
+    }
+
+    function switchToLastMonthToComboBoxMonth(){
+        if (comboBoxMonthText < 1){
+            comboboxDate.currentIndex--
+        }
+    }
+    function switchToNextMonthToComboBoxMonth(){
+        if (comboBoxMonthText < 12){
+            comboboxDate.currentIndex++
         }
     }
 }

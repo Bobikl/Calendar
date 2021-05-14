@@ -57,8 +57,12 @@ FishUI.Window {
             calendarDate.todayDateToColor = getTodayDate()
             calendarDate.todayMonthToColor = currentDateTimeTest()
             calendarMonth.comboBoxYearCurrentIndex = getTodatYear() - 2000
+            calendarDate.choseMonth = calendarMonth.comboBoxMonthText
 //            getTimeDate.getTimeDateRet(Date().toString())
 //            console.log(getTimeDate.getTimeDateRet(Date().toString()))
+            calendarDate.year = currentDateTimeTest()
+            calendarDate.month = getTodayDate()
+            calendarDate.data = getTodatYear()
         }
     }
 
@@ -108,17 +112,8 @@ FishUI.Window {
                 calendarDate.interval(comboboxNumber)
                 calendarDate.lastMonth(comboboxNumber)
                 calendarDate.todayColor(comboboxNumber)
+                calendarDate.choseMonth = comboBoxMonthText
             }
-
-//            transitions: Transition {
-//                PropertyAnimation {
-//                    id: calendarDateTransition
-//                    target: calendarDate
-//                    property: "opacity"
-//                    to: 100
-//                }
-//            }
-
             onYearPressed: {
                 calendarDate.yaerToDateCalculation(yearNumber)
                 calendarDate.interval(comboBoxMonthText)
@@ -202,7 +197,12 @@ FishUI.Window {
             id: calendarDate
             Layout.fillHeight: true
             Layout.fillWidth: true
+            onSwitchToLastMonthPressed: {
+                calendarMonth.switchToLastMonthToComboBoxMonth()
+            }
+            onSwitchToNextMonthPressed: {
+                calendarMonth.switchToNextMonthToComboBoxMonth()
+            }
         }
-
     }
 }

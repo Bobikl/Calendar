@@ -2,8 +2,8 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 
 Item {
-    id: item
-    visible: true
+    signal switchToLastMonthPressed (var switchLastMonth)
+    signal switchToNextMonthPressed
     // 2021-01-01
     property var testNumber: 4
     property var yearTestNumber: 0
@@ -20,6 +20,13 @@ Item {
     property int runnianAddDate: 0
     //三月前
     property int specialDate: 0
+    property int choseMonth: 0
+    //今天标红
+    property int year: 0
+    property int month: 0
+    property int date: 0
+    id: item
+    visible: true
     GridView {
         id: gridView
         anchors.fill: parent
@@ -61,6 +68,15 @@ Item {
                 onExited: {
                     delegateRectangle.border.color = "white"
                 }
+                onClicked: {
+                    if (index < testNumber){
+                        item.switchToLastMonthPressed(choseMonth)
+                        interval((choseMonth < 0 || choseMonth === 1) ? 1 : --choseMonth)
+                    } else if((index - testNumber + 1) > dateNumber) {
+                        item.switchToNextMonthPressed()
+                        interval((choseMonth === 12) ? 12 : ++choseMonth)
+                    }
+                }
             }
         }
     }
@@ -71,6 +87,7 @@ Item {
         } else if ((dateColorIndex + 1 - testNumber) > dateNumber) {
             return "grey"
         } else if (((dateColorIndex + 1 - testNumber) === Number(todayDateToColor)) && (addNumber === 0)){
+//        }else if ((dateColorIndex + 1 - testNumber) === date && choseMonth){
             return "red"
         } else {
             return "black"
