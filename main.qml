@@ -20,9 +20,9 @@ FishUI.Window {
     function timeRunning(){
         if (timer.running && timeNumber === 0){
             calendarDate.yaerToDateCalculation(getTodatYear())
-            calendarDate.year = getTodatYear()
             calendarDate.lunarYear = getTodatYear()
             calendarDate.lunarMonth = getTodayMonth()
+            calendarDate.year = getTodatYear()
             calendarDate.month = getTodayMonth()
             calendarDate.date = getTodayDate()
             calendarDate.comboBoxYearChose = getTodatYear()
@@ -33,9 +33,6 @@ FishUI.Window {
             calendarDate.interval(initialNumber)
             calendarMonth.comboBoxYearCurrentIndex = getTodatYear() - 2000
             calendarDate.choseMonth = calendarMonth.comboBoxMonthText
-            calendarDate.year = currentDateTimeTest()
-            calendarDate.month = getTodayDate()
-            calendarDate.date = getTodatYear()
             calendarDate.choseYear = calendarMonth.comboBoxYearText
             timeNumber++
         }
