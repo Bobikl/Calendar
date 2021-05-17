@@ -8,7 +8,8 @@ Item {
     signal pressed (var comboboxNumber)
     signal yearPressed (var yearNumber)
     property int comboboxIndex: 0
-    property int comboBoxMonthText: comboboxDate.displayText
+    property int comboBoxMonthText: comboBoxMonthItemText.text
+    property int comboBoxYearText: comboboxYearText.text
     property int comboBoxYearCurrentIndex: 0
     RowLayout {
         anchors.fill: parent
@@ -18,7 +19,7 @@ Item {
             currentIndex: comboBoxYearCurrentIndex
             contentItem: Text{
                 id: comboboxYearText
-                text: "2021"
+                text: "20" + comboBoxYearCurrentIndex
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
             }
@@ -41,7 +42,7 @@ Item {
                         property: "height"
                         from: 0
                         to: 300
-                        duration: 300
+                        duration: 200
                     }
 
                 }
@@ -62,13 +63,13 @@ Item {
                     model:50
                     clip: true
                     width: parent.width
-                    delegate: testComponent
+                    delegate: componentYear
                 }
             }
         }
 
         Component {
-            id: testComponent
+            id: componentYear
             Rectangle {
                 width: yearPopup.width
                 height: 40
@@ -94,24 +95,12 @@ Item {
         ComboBox {
             id: comboboxDate
             Layout.fillWidth: true
-            currentIndex: comboboxIndex
-            model: ListModel {
-                id: monthModel
-                ListElement { text: "1" }
-                ListElement { text: "2" }
-                ListElement { text: "3" }
-                ListElement { text: "4" }
-                ListElement { text: "5" }
-                ListElement { text: "6" }
-                ListElement { text: "7" }
-                ListElement { text: "8" }
-                ListElement { text: "9" }
-                ListElement { text: "10" }
-                ListElement { text: "11" }
-                ListElement { text: "12" }
-            }
-            onActivated: {
-                item.pressed(Number(displayText))
+            currentIndex: comboboxIndex - 1
+            contentItem: Text {
+                id: comboBoxMonthItemText
+                text: comboboxIndex
+                font.pixelSize: 15
+                verticalAlignment: Text.AlignVCenter
             }
 
             popup: Popup {
@@ -131,7 +120,7 @@ Item {
                         property: "height"
                         from: 0
                         to: 300
-                        duration: 300
+                        duration: 200
                     }
                 }
 
@@ -149,8 +138,33 @@ Item {
                     id: listView
                     anchors.fill: parent
                     width: parent.width
-                    model: comboboxDate.delegateModel
+                    model: 12
+                    delegate: componentMonth
                     clip: true
+                }
+            }
+            Component {
+                id: componentMonth
+                Rectangle {
+                    height: 40
+                    width: monthPopup.width
+                    color: monthMouse.pressed ? comboBoxTodayYear(1) : comboBoxTodayYear(2)
+                    MouseArea {
+                        id: monthMouse
+                        anchors.fill: parent
+                        onClicked: {
+                            item.pressed(Number(componentText.text))
+                            comboboxDate.popup.close()
+                            comboBoxMonthItemText.text = componentText.text
+                            comboboxDate.currentIndex = componentText.text - 1
+                        }
+                    }
+
+                    Text {
+                        id: componentText
+                        text: index + 1
+                        anchors.centerIn: parent
+                    }
                 }
             }
         }
@@ -164,13 +178,13 @@ Item {
     }
 
     function switchToLastMonthToComboBoxMonth(){
-        if (comboBoxMonthText < 1){
-            comboboxDate.currentIndex--
+        if (Number(comboBoxMonthItemText.text) > 1){
+            comboBoxMonthItemText.text--
         }
     }
     function switchToNextMonthToComboBoxMonth(){
-        if (comboBoxMonthText < 12){
-            comboboxDate.currentIndex++
+        if (Number(comboBoxMonthItemText.text) < 12){
+            comboBoxMonthItemText.text++
         }
     }
 }

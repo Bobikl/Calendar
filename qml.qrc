@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>CalendarDate.qml</file>
         <file>CalendarMonth.qml</file>
+        <file>lunar.js</file>
+        <file>AddTextWindow.qml</file>
     </qresource>
 </RCC>

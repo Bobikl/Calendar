@@ -2,86 +2,61 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.5
 import QtQml.Models 2.1
+import "lunar.js" as T1
 import FishUI 1.0 as FishUI
 
 FishUI.Window {
     id: root
-    width: 600
+    width: 840
     height: 700
-    minimumWidth: 600
+    minimumWidth: 840
     minimumHeight: 700
     visible: true
     title: qsTr("Hello World")
 
-    property var timeNumber: 0
+
+    property int timeNumber: 0
 
     function timeRunning(){
         if (timer.running && timeNumber === 0){
-             var lastTimeMonth = currentDateTimeTest()
-             var lastMonthTextT
-            timeNumber++
-            lastTimeMonth = lastTimeMonth - 1
-            if (lastTimeMonth === 0){
-                lastMonthTextT = 31
-            }
-            else if (lastTimeMonth === 2){
-                lastMonthTextT = 28
-            } else if (lastTimeMonth % 2 === 1 && lastTimeMonth <= 7){
-                lastMonthTextT = 31
-            } else if (lastTimeMonth % 2 === 0 && lastTimeMonth <= 7){
-                lastMonthTextT = 30
-            } else if ((lastTimeMonth + 1) % 2 === 1 && lastTimeMonth > 7){
-                lastMonthTextT = 31
-            } else if ((lastTimeMonth + 1) % 2 === 2 && lastTimeMonth > 7){
-                lastMonthTextT = 30
-            }
-
-            var initialNumber = currentDateTimeTest()
-            var dateNumber
-            calendarMonth.comboboxIndex = Number(initialNumber - 1)
-            if (initialNumber === 2){
-                dateNumber = 28
-            } else if (initialNumber % 2 === 1 && initialNumber <= 7){
-                dateNumber = 31
-            } else if (initialNumber % 2 === 0 && initialNumber <= 7){
-                dateNumber = 30
-            } else if ((initialNumber + 1) % 2 === 1 && initialNumber > 7){
-                dateNumber = 31
-            } else if ((initialNumber + 1) % 2 === 0 && initialNumber > 7){
-                dateNumber = 30
-            }
             calendarDate.yaerToDateCalculation(getTodatYear())
+            calendarDate.year = getTodatYear()
+            calendarDate.lunarYear = getTodatYear()
+            calendarDate.lunarMonth = getTodayMonth()
+            calendarDate.month = getTodayMonth()
+            calendarDate.date = getTodayDate()
+            calendarDate.comboBoxYearChose = getTodatYear()
+            var lastTimeMonth = getTodayMonth()
+            calendarDate.lastMonth(lastTimeMonth)
+            var initialNumber = getTodayMonth()
+            calendarMonth.comboboxIndex = Number(initialNumber)
             calendarDate.interval(initialNumber)
-            calendarDate.dateNumber = dateNumber
-            calendarDate.lastMonthText = lastMonthTextT
-            calendarDate.todayDateToColor = getTodayDate()
-            calendarDate.todayMonthToColor = currentDateTimeTest()
             calendarMonth.comboBoxYearCurrentIndex = getTodatYear() - 2000
             calendarDate.choseMonth = calendarMonth.comboBoxMonthText
-//            getTimeDate.getTimeDateRet(Date().toString())
-//            console.log(getTimeDate.getTimeDateRet(Date().toString()))
             calendarDate.year = currentDateTimeTest()
             calendarDate.month = getTodayDate()
             calendarDate.date = getTodatYear()
+            calendarDate.choseYear = calendarMonth.comboBoxYearText
+            timeNumber++
         }
     }
 
     function currentDateTime() {
         return Qt.formatDateTime(new Date(), "yyyy-MM-dd hh:mm:ss ddd");
-}
-    function currentDateTimeTest() {
+    }
+    function getTodatYear() {
+        return Qt.formatDateTime(new Date(), "yyyy");
+    }
+    function getTodayMonth() {
         return Qt.formatDateTime(new Date(), "MM");
     }
     function getTodayDate() {
         return Qt.formatDateTime(new Date(), "dd");
     }
-    function getTodatYear() {
-        return Qt.formatDateTime(new Date(), "yyyy");
-    }
 
     Timer {
         id: timer
-        interval: 500
+        interval: 100
         running: true
         repeat: true
         triggeredOnStart: true
@@ -95,12 +70,27 @@ FishUI.Window {
         anchors.fill: parent
         anchors.margins: FishUI.Units.smallSpacing
 
-        Rectangle {
-            Layout.fillWidth: true
-            height: 50
-            Text {
-                id: timeText
-                font.pixelSize: 40
+        RowLayout {
+            Rectangle {
+                Layout.fillWidth: true
+                height: 40
+                Text {
+                    id: timeText
+                    font.pixelSize: 30
+                }
+            }
+            Rectangle {
+                Layout.fillWidth: true
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                height: 40
+                Text {
+                    id: lunarTimeText
+                    font.pixelSize: 30
+                    text: T1.calendar.getLunartoDay(getTodatYear(), getTodayMonth(), getTodayDate())
+                }
             }
         }
 
@@ -109,16 +99,16 @@ FishUI.Window {
             height: 50
             Layout.fillWidth: true
             onPressed: {
+                calendarDate.lunarMonth = comboboxNumber
                 calendarDate.interval(comboboxNumber)
                 calendarDate.lastMonth(comboboxNumber)
-                calendarDate.todayColor(comboboxNumber)
-                calendarDate.choseMonth = comboBoxMonthText
+                calendarDate.choseMonth = comboboxNumber
             }
             onYearPressed: {
+                calendarDate.lunarYear = yearNumber
                 calendarDate.yaerToDateCalculation(yearNumber)
                 calendarDate.interval(comboBoxMonthText)
-                calendarDate.visible = false
-                calendarDate.visible = true
+                calendarDate.comboBoxYearChose = yearNumber
             }
         }
 
@@ -197,12 +187,24 @@ FishUI.Window {
             id: calendarDate
             Layout.fillHeight: true
             Layout.fillWidth: true
+
             onSwitchToLastMonthPressed: {
                 calendarMonth.switchToLastMonthToComboBoxMonth()
             }
             onSwitchToNextMonthPressed: {
                 calendarMonth.switchToNextMonthToComboBoxMonth()
             }
+            onShowAddTextWindow: {
+                addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
+                addTextWindow.show()
+            }
         }
+    }
+    AddTextWindow {
+        id: addTextWindow
+        width: 600
+        height: 400
+        maximumWidth: 600
+        maximumHeight:400
     }
 }
