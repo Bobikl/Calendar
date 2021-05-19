@@ -14,6 +14,11 @@ FishUI.Window {
     visible: true
     title: qsTr("Hello World")
 
+    QtObject{
+        Component.onCompleted: {
+            timeRunning()
+        }
+    }
 
     property int timeNumber: 0
 
@@ -34,6 +39,7 @@ FishUI.Window {
             calendarMonth.comboBoxYearCurrentIndex = getTodatYear() - 2000
             calendarDate.choseMonth = calendarMonth.comboBoxMonthText
             calendarDate.choseYear = calendarMonth.comboBoxYearText
+            addTextWindow.refreshChoseMonth = getTodayMonth()
             timeNumber++
         }
     }
@@ -59,7 +65,7 @@ FishUI.Window {
         triggeredOnStart: true
         onTriggered: {
             timeText.text = currentDateTime()
-            timeRunning()
+//            timeRunning()
         }
     }
 
@@ -100,12 +106,15 @@ FishUI.Window {
                 calendarDate.interval(comboboxNumber)
                 calendarDate.lastMonth(comboboxNumber)
                 calendarDate.choseMonth = comboboxNumber
+                addTextWindow.refreshChoseMonth = comboboxNumber
             }
             onYearPressed: {
                 calendarDate.lunarYear = yearNumber
                 calendarDate.yaerToDateCalculation(yearNumber)
                 calendarDate.interval(comboBoxMonthText)
+                calendarDate.choseYear = yearNumber
                 calendarDate.comboBoxYearChose = yearNumber
+                addTextWindow.refreshChoseYear = yearNumber
             }
         }
 
@@ -192,7 +201,20 @@ FishUI.Window {
                 calendarMonth.switchToNextMonthToComboBoxMonth()
             }
             onShowAddTextWindow: {
+                addTextWindow.clearText()
                 addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
+                addTextWindow.choseDateT = calendarDate.returnChoseDay
+                addTextWindow.choseMonthT = calendarDate.choseMonth
+                addTextWindow.choseYearT = calendarDate.choseYear
+                addTextWindow.show()
+            }
+            onShowSaveSign: {
+                addTextWindow.clearText()
+                addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
+                addTextWindow.choseDateT = calendarDate.returnChoseDay
+                addTextWindow.choseMonthT = calendarDate.choseMonth
+                addTextWindow.choseYearT = calendarDate.choseYear
+                addTextWindow.showTitleAndContent(first, second)
                 addTextWindow.show()
             }
         }
@@ -203,5 +225,23 @@ FishUI.Window {
         height: 400
         maximumWidth: 600
         maximumHeight:400
+        onSavePressed: {
+            calendarDate.addTextDate = D
+            calendarDate.addTextMonth = M
+            calendarDate.addTextYear = Y
+        }
+        onAddSuccessOrFaile: {
+            if (notice === 1){
+                console.log("success")
+            } else {
+                console.log("faile")
+            }
+        }
+        onDeleteFile: {
+            calendarDate.interval(DM)
+            calendarDate.addTextDate = -100
+            calendarDate.addTextMonth = -1000
+            calendarDate.addTextYear = -100
+        }
     }
 }

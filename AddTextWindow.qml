@@ -9,6 +9,15 @@ Window {
     visible: false
     title: "创建日程"
     property var getChoseDay: 0
+    property int choseYearT: 0
+    property int choseMonthT: 0
+    property int choseDateT: 0
+    signal savePressed(var D, var M, var Y)
+    signal addSuccessOrFaile(var notice)
+    signal deleteFile(var DY, var DM, var DD)
+    //刷新
+    property int refreshChoseYear: 0
+    property int refreshChoseMonth: 0
 
     SaveTheFile {
         id: saveTheFile
@@ -88,28 +97,17 @@ Window {
                         id: textEdit
                         anchors.left: parent.left
                         anchors.leftMargin: 5
-                        height: contentHeight
+                        height: parent.height
                         width: parent.width - 5
                         selectByMouse: true
                         wrapMode: TextEdit.Wrap
                         font.pixelSize: 20
-                        text: "11111111111111111111111111111111111111111111111111111333333333333
+//                        text: "11111111111111111111111111111111111111111111111111111333333333333
 
 
 
-                               adwadawdawdawdawdawdadwadadwwddaaddaaaaaaaaaaaaaaaaa3333333dadwadadawdawdawdawdawdawdawdawdwaddwad333333333322222222aaaaaaaaaaaaasssssssssssssssssssssssssddddddddddddddddaaaaaaaa2"
+//                               adwadawdawdawdawdawdadwadadwwddaaddaaaaaaaaaaaaaaaaa3333333dadwadadawdawdawdawdawdawdawdawdwaddwad333333333322222222aaaaaaaaaaaaasssssssssssssssssssssssssddddddddddddddddaaaaaaaa2"
                         y: -vbar.position * textEdit.height
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onWheel: {
-                                if (wheel.angleDelta < 0){
-                                    textEdit.y -= 10
-                                } else {
-                                    textEdit.y += 10
-                                }
-                            }
-                        }
 
                         ScrollBar {
                             id: vbar
@@ -134,6 +132,29 @@ Window {
                 spacing: 20
                 Rectangle {
                     Layout.fillWidth: true
+                }
+
+                Rectangle {
+                    id: deleteRectangle
+                    width: 80
+                    height: 40
+                    visible: false
+                    color: "grey"
+                    Text {
+                        anchors.centerIn: parent
+                        text: "删除事件"
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            saveTheFile.deleteFile(getChoseDay)
+                            textWindow.deleteFile(refreshChoseYear, refreshChoseMonth, choseDateT)
+                            textInput.clear()
+                            textEdit.clear()
+                            parent.visible = false
+                            addTextWindow.close()
+                        }
+                    }
                 }
 
                 Rectangle {
@@ -166,17 +187,31 @@ Window {
                         anchors.fill: parent
                         onClicked: {
                             textWindow.close()
-//                            saveTheFile.getInputText(getChoseDay, textInput.text, textEdit.text)
+                            saveTheFile.getInputText(getChoseDay, textInput.text, textEdit.text)
+                            if (textInput.text === "" && textEdit.text === ""){
+                                textWindow.addSuccessOrFaile(0)
+                            } else {
+                                textWindow.savePressed(choseDateT, choseMonthT, choseYearT)
+                                textWindow.addSuccessOrFaile(1)
+                            }
                             textInput.clear()
                             textEdit.clear()
                         }
                     }
                 }
-
                 Rectangle {
                     width: 40
                 }
             }
         }
+    }
+    function showTitleAndContent(F, C){
+        textInput.text = F
+        textEdit.text = C
+        deleteRectangle.visible = true
+    }
+    function clearText(){
+        textInput.clear()
+        textEdit.clear()
     }
 }

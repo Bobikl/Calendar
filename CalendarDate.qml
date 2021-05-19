@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import "lunar.js" as T2
+import CalendarSave 1.0
 
 Item {
     id: item
@@ -8,6 +9,7 @@ Item {
     signal switchToLastMonthPressed (var switchLastMonth)
     signal switchToNextMonthPressed
     signal showAddTextWindow
+    signal showSaveSign (var first, var second)
     // 2021-01-01
     property int testNumber: 4
     property int yearTestNumber: 0
@@ -33,6 +35,22 @@ Item {
     //计算润年
     property int lunarYear: 0
     property int lunarMonth: 0
+    //添加后显示
+    property int addTextDate: -100
+    property int addTextMonth: -100
+    property int addTextYear: -100
+    //删除后不显示
+    property int deleteTextDate: -100
+    property int deleteTextMonth: -100
+    property int deleteTextYear: -100
+    //内容
+    property var outTitle
+    property var outContent
+
+    SaveTheFile {
+        id: saveTheFileToDate
+    }
+
     GridView {
         id: gridView
         anchors.fill: parent
@@ -58,23 +76,17 @@ Item {
             width: item.width / 7
             height: item.height / 6
             radius: 10
-            Text {
-                id: delegateRectangleText
-                text: dateText(index)
-                anchors.centerIn: parent
-                font.pixelSize: 25
-                color: dateColor(index)
-            }
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
-                onEntered: {
-                    delegateRectangle.border.color = "white"
-                }
-                onExited: {
-                    delegateRectangle.border.color = "white"
-                }
+//                onEntered: {
+//                    delegateRectangle.border.color = "white"
+//                }
+//                onExited: {
+//                    delegateRectangle.border.color = "white"
+//                }
                 onClicked: {
+                    returnChoseDay = delegateRectangleText.text
                     if (index < testNumber){
                         lunarMonth--
                         item.switchToLastMonthPressed(choseMonth)
@@ -85,20 +97,81 @@ Item {
                         item.switchToNextMonthPressed()
                         lastMonth(choseMonth + 1)
                         interval((choseMonth === 12) ? 12 : ++choseMonth)
-                    } else {
-                        returnChoseDay = delegateRectangleText.text
+                    } else if (!signRectangle.visible){
                         item.showAddTextWindow()
+                    }
+                    if (signRectangle.visible){
+                        for (var i = 0; i < 2; i++){
+                            if (i === 0){
+                                outTitle = saveTheFileToDate.outPutFileContent(choseYear, choseMonth, (index - testNumber + 1))
+                            } else {
+                                outContent = saveTheFileToDate.outPutFileContent(choseYear, choseMonth, (index - testNumber + 1))
+                            }
+                        }
+                        item.showSaveSign(outTitle, outContent)
                     }
                 }
             }
-            Text {
-                id: lunarDayText
-                anchors.top: delegateRectangleText.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: getLunarDayText(index)
-                font.pixelSize: 15
-                color: dateColor(index)
+            ColumnLayout {
+                anchors.fill: parent
+                RowLayout {
+                    Rectangle {
+                        Layout.fillWidth: true
+                    }
+                    Text {
+                        id: delegateRectangleText
+                        text: dateText(index)
+                        font.pixelSize: 25
+                        color: dateColor(index)
+                    }
+                    Rectangle {
+                        Layout.fillWidth: true
+                    }
+                }
+
+                RowLayout {
+                    Rectangle {
+                        Layout.fillWidth: true
+                    }
+                    Text {
+                        id: lunarDayText
+                        text: getLunarDayText(index)
+                        font.pixelSize: 15
+                        color: dateColor(index)
+                    }
+                    Rectangle {
+                        Layout.fillWidth: true
+                    }
+
+                }
+                RowLayout {
+                    Rectangle {
+                        Layout.fillWidth: true
+                    }
+                    Rectangle {
+                        id: signRectangle
+                        visible: signColor(index)
+                        radius: 50
+                        width: 15
+                        height: 15
+                        color: "red"
+                    }
+                    Rectangle {
+                        Layout.fillWidth: true
+                    }
+                }
+
             }
+        }
+    }
+
+    function signColor(index){
+        if(saveTheFileToDate.getFileName(choseYear, choseMonth, (index - testNumber + 1)) || (addTextDate === (index - testNumber + 1)
+                                                                                              && addTextMonth === choseMonth
+                                                                                              && addTextYear === choseYear)){
+            return true
+        }else {
+            return false
         }
     }
 
@@ -110,7 +183,6 @@ Item {
         } else if ((index - testNumber + 1) > dateNumber && lunarMonth < 12){
             return T2.calendar.getLunartoDayEvery(lunarYear, (lunarMonth + 1), (index - dateNumber - testNumber + 1))
         } else {
-//            console.log(lunarYear + " " + (lunarMonth + 1) + " " + (index - dateNumber - testNumber + 1))
             return "0000"
         }
     }
