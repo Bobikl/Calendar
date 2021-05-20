@@ -68,165 +68,180 @@ FishUI.Window {
         }
     }
 
-    ColumnLayout {
-        anchors.fill: parent
+    Notice {
+        id: notice
+        visible: false
+        width: 30
+        height: 30
+    }
+
+    RowLayout {
         anchors.margins: FishUI.Units.smallSpacing
+        anchors.fill: parent
+        ColumnLayout {
+            RowLayout {
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 40
+                    Text {
+                        id: timeText
+                        font.pixelSize: 30
+                    }
+                }
+                Rectangle {
+                    Layout.fillWidth: true
+                }
 
-        RowLayout {
-            Rectangle {
-                Layout.fillWidth: true
-                height: 40
-                Text {
-                    id: timeText
-                    font.pixelSize: 30
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 40
+                    Text {
+                        id: lunarTimeText
+                        font.pixelSize: 30
+                        text: T1.calendar.getLunartoDay(getTodatYear(), getTodayMonth(), getTodayDate())
+                    }
                 }
             }
-            Rectangle {
+
+            CalendarMonth {
+                id: calendarMonth
+                height: 50
                 Layout.fillWidth: true
+                onPressed: {
+                    calendarDate.lunarMonth = comboboxNumber
+                    calendarDate.interval(comboboxNumber)
+                    calendarDate.lastMonth(comboboxNumber)
+                    calendarDate.choseMonth = comboboxNumber
+                    addTextWindow.refreshChoseMonth = comboboxNumber
+                }
+                onYearPressed: {
+                    calendarDate.lunarYear = yearNumber
+                    calendarDate.yearToDateCalculation(yearNumber)
+                    calendarDate.interval(comboBoxMonthText)
+                    calendarDate.choseYear = yearNumber
+                    calendarDate.comboBoxYearChose = yearNumber
+                    addTextWindow.refreshChoseYear = yearNumber
+                }
             }
 
-            Rectangle {
+
+
+            RowLayout {
+                height: 50
                 Layout.fillWidth: true
-                height: 40
-                Text {
-                    id: lunarTimeText
-                    font.pixelSize: 30
-                    text: T1.calendar.getLunartoDay(getTodatYear(), getTodayMonth(), getTodayDate())
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: parent.height
+                    Text {
+                        anchors.centerIn: parent
+                        text: "星期一"
+                        font.pixelSize: 20
+                    }
+                }
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: parent.height
+                    Text {
+                        anchors.centerIn: parent
+                        text: "星期二"
+                        font.pixelSize: 20
+                    }
+                }
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: parent.height
+                    Text {
+                        anchors.centerIn: parent
+                        text: "星期三"
+                        font.pixelSize: 20
+                    }
+                }
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: parent.height
+                    Text {
+                        anchors.centerIn: parent
+                        text: "星期四"
+                        font.pixelSize: 20
+                    }
+                }
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: parent.height
+                    Text {
+                        anchors.centerIn: parent
+                        text: "星期五"
+                        font.pixelSize: 20
+                    }
+                }
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: parent.height
+                    Text {
+                        anchors.centerIn: parent
+                        text: "星期六"
+                        font.pixelSize: 20
+                    }
+                }
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: parent.height
+                    Text {
+                        anchors.centerIn: parent
+                        text: "星期日"
+                        font.pixelSize: 20
+                    }
+                }
+            }
+
+            CalendarDate {
+                id: calendarDate
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                onSwitchToLastMonthPressed: {
+                    calendarMonth.switchToLastMonthToComboBoxMonth()
+                }
+                onSwitchToNextMonthPressed: {
+                    calendarMonth.switchToNextMonthToComboBoxMonth()
+                }
+                onSwitchToYearPressed: {
+                    if(switchToYearPressedNumber === 0){
+                        calendarMonth.switchToLastYearComboBoxYear()
+                    } else if (switchToYearPressedNumber === 1){
+                        calendarMonth.switchToNextYearComboBoxYear()
+                    }
+
+                }
+
+                onShowAddTextWindow: {
+                    addTextWindow.clearText()
+                    addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
+                    addTextWindow.choseDateT = calendarDate.returnChoseDay
+                    addTextWindow.choseMonthT = calendarDate.choseMonth
+                    addTextWindow.choseYearT = calendarDate.choseYear
+                    addTextWindow.show()
+                }
+                onShowSaveSign: {
+                    addTextWindow.clearText()
+                    addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
+                    addTextWindow.choseDateT = calendarDate.returnChoseDay
+                    addTextWindow.choseMonthT = calendarDate.choseMonth
+                    addTextWindow.choseYearT = calendarDate.choseYear
+                    addTextWindow.showTitleAndContent(first, second)
+                    addTextWindow.show()
                 }
             }
         }
-
-        CalendarMonth {
-            id: calendarMonth
-            height: 50
-            Layout.fillWidth: true
-            onPressed: {
-                calendarDate.lunarMonth = comboboxNumber
-                calendarDate.interval(comboboxNumber)
-                calendarDate.lastMonth(comboboxNumber)
-                calendarDate.choseMonth = comboboxNumber
-                addTextWindow.refreshChoseMonth = comboboxNumber
-            }
-            onYearPressed: {
-                calendarDate.lunarYear = yearNumber
-                calendarDate.yearToDateCalculation(yearNumber)
-                calendarDate.interval(comboBoxMonthText)
-                calendarDate.choseYear = yearNumber
-                calendarDate.comboBoxYearChose = yearNumber
-                addTextWindow.refreshChoseYear = yearNumber
-            }
-        }
-
-
-
-        RowLayout {
-            height: 50
-            Layout.fillWidth: true
-
-            Rectangle {
-                Layout.fillWidth: true
-                height: parent.height
-                Text {
-                    anchors.centerIn: parent
-                    text: "星期一"
-                    font.pixelSize: 20
-                }
-            }
-            Rectangle {
-                Layout.fillWidth: true
-                height: parent.height
-                Text {
-                    anchors.centerIn: parent
-                    text: "星期二"
-                    font.pixelSize: 20
-                }
-            }
-            Rectangle {
-                Layout.fillWidth: true
-                height: parent.height
-                Text {
-                    anchors.centerIn: parent
-                    text: "星期三"
-                    font.pixelSize: 20
-                }
-            }
-            Rectangle {
-                Layout.fillWidth: true
-                height: parent.height
-                Text {
-                    anchors.centerIn: parent
-                    text: "星期四"
-                    font.pixelSize: 20
-                }
-            }
-            Rectangle {
-                Layout.fillWidth: true
-                height: parent.height
-                Text {
-                    anchors.centerIn: parent
-                    text: "星期五"
-                    font.pixelSize: 20
-                }
-            }
-            Rectangle {
-                Layout.fillWidth: true
-                height: parent.height
-                Text {
-                    anchors.centerIn: parent
-                    text: "星期六"
-                    font.pixelSize: 20
-                }
-            }
-            Rectangle {
-                Layout.fillWidth: true
-                height: parent.height
-                Text {
-                    anchors.centerIn: parent
-                    text: "星期日"
-                    font.pixelSize: 20
-                }
-            }
-        }
-
-        CalendarDate {
-            id: calendarDate
+        SideBorder{
+            id: sideBorder
             Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            onSwitchToLastMonthPressed: {
-                calendarMonth.switchToLastMonthToComboBoxMonth()
-            }
-            onSwitchToNextMonthPressed: {
-                calendarMonth.switchToNextMonthToComboBoxMonth()
-            }
-            onSwitchToYearPressed: {
-                if(switchToYearPressedNumber === 0){
-                    calendarMonth.switchToLastYearComboBoxYear()
-                } else if (switchToYearPressedNumber === 1){
-                    calendarMonth.switchToNextYearComboBoxYear()
-                }
-
-            }
-
-            onShowAddTextWindow: {
-                addTextWindow.clearText()
-                addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
-                addTextWindow.choseDateT = calendarDate.returnChoseDay
-                addTextWindow.choseMonthT = calendarDate.choseMonth
-                addTextWindow.choseYearT = calendarDate.choseYear
-                addTextWindow.show()
-            }
-            onShowSaveSign: {
-                addTextWindow.clearText()
-                addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
-                addTextWindow.choseDateT = calendarDate.returnChoseDay
-                addTextWindow.choseMonthT = calendarDate.choseMonth
-                addTextWindow.choseYearT = calendarDate.choseYear
-                addTextWindow.showTitleAndContent(first, second)
-                addTextWindow.show()
-            }
+            width: 100
+            visible: false
         }
     }
+
     AddTextWindow {
         id: addTextWindow
         width: 600

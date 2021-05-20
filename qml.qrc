@@ -6,5 +6,6 @@
         <file>lunar.js</file>
         <file>AddTextWindow.qml</file>
         <file>Notice.qml</file>
+        <file>SideBorder.qml</file>
     </qresource>
 </RCC>
