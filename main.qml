@@ -24,7 +24,7 @@ FishUI.Window {
 
     function timeRunning(){
         if (timer.running && timeNumber === 0){
-            calendarDate.yaerToDateCalculation(getTodatYear())
+            calendarDate.yearToDateCalculation(getTodatYear())
             calendarDate.lunarYear = getTodatYear()
             calendarDate.lunarMonth = getTodayMonth()
             calendarDate.year = getTodatYear()
@@ -65,7 +65,6 @@ FishUI.Window {
         triggeredOnStart: true
         onTriggered: {
             timeText.text = currentDateTime()
-//            timeRunning()
         }
     }
 
@@ -110,7 +109,7 @@ FishUI.Window {
             }
             onYearPressed: {
                 calendarDate.lunarYear = yearNumber
-                calendarDate.yaerToDateCalculation(yearNumber)
+                calendarDate.yearToDateCalculation(yearNumber)
                 calendarDate.interval(comboBoxMonthText)
                 calendarDate.choseYear = yearNumber
                 calendarDate.comboBoxYearChose = yearNumber
@@ -200,6 +199,15 @@ FishUI.Window {
             onSwitchToNextMonthPressed: {
                 calendarMonth.switchToNextMonthToComboBoxMonth()
             }
+            onSwitchToYearPressed: {
+                if(switchToYearPressedNumber === 0){
+                    calendarMonth.switchToLastYearComboBoxYear()
+                } else if (switchToYearPressedNumber === 1){
+                    calendarMonth.switchToNextYearComboBoxYear()
+                }
+
+            }
+
             onShowAddTextWindow: {
                 addTextWindow.clearText()
                 addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
@@ -231,11 +239,7 @@ FishUI.Window {
             calendarDate.addTextYear = Y
         }
         onAddSuccessOrFaile: {
-            if (notice === 1){
-                console.log("success")
-            } else {
-                console.log("faile")
-            }
+
         }
         onDeleteFile: {
             calendarDate.interval(DM)

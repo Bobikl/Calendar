@@ -187,5 +187,15 @@ Item {
             comboBoxMonthItemText.text++
         }
     }
+    function switchToLastYearComboBoxYear(){
+        comboboxYearText.text--
+        comboBoxMonthItemText.text = 12
+        comboboxDate.currentIndex = 11
+    }
+    function switchToNextYearComboBoxYear(){
+        comboboxYearText.text++
+        comboBoxMonthItemText.text = 1
+        comboboxDate.currentIndex = 0
+    }
 }
 

@@ -187,13 +187,14 @@ Window {
                         anchors.fill: parent
                         onClicked: {
                             textWindow.close()
-                            saveTheFile.getInputText(getChoseDay, textInput.text, textEdit.text)
-                            if (textInput.text === "" && textEdit.text === ""){
-                                textWindow.addSuccessOrFaile(0)
-                            } else {
+                            if (saveTheFile.getInputText(getChoseDay, textInput.text, textEdit.text)){
                                 textWindow.savePressed(choseDateT, choseMonthT, choseYearT)
-                                textWindow.addSuccessOrFaile(1)
                             }
+//                            if (textInput.text === "" && textEdit.text === ""){
+//                                textWindow.addSuccessOrFaile(0)
+//                            } else {
+//                                textWindow.addSuccessOrFaile(1)
+//                            }
                             textInput.clear()
                             textEdit.clear()
                         }

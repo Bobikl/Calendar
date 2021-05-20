@@ -10,6 +10,7 @@ Item {
     signal switchToNextMonthPressed
     signal showAddTextWindow
     signal showSaveSign (var first, var second)
+    signal switchToYearPressed (var switchToYearPressedNumber)
     // 2021-01-01
     property int testNumber: 4
     property int yearTestNumber: 0
@@ -87,16 +88,34 @@ Item {
 //                }
                 onClicked: {
                     returnChoseDay = delegateRectangleText.text
-                    if (index < testNumber){
+                    if (index < testNumber && choseMonth !== 1){
                         lunarMonth--
                         item.switchToLastMonthPressed(choseMonth)
                         lastMonth(choseMonth - 1)
                         interval((choseMonth < 0 || choseMonth === 1) ? 1 : --choseMonth)
-                    } else if((index - testNumber + 1) > dateNumber) {
+                    } else if((index - testNumber + 1) > dateNumber && choseMonth !== 12) {
                         lunarMonth++
                         item.switchToNextMonthPressed()
                         lastMonth(choseMonth + 1)
                         interval((choseMonth === 12) ? 12 : ++choseMonth)
+                    } else if (choseMonth === 1) {
+                        lunarYear--
+                        lunarMonth = 12
+                        choseMonth = 12
+                        choseYear--
+                        yearToDateCalculation(choseYear)
+                        lastMonth(1)
+                        item.switchToYearPressed(0)
+                        interval(12)
+                    } else if (choseMonth === 12) {
+                        lunarYear++
+                        lunarMonth = 1
+                        choseMonth = 1
+                        choseYear++
+                        yearToDateCalculation(choseYear)
+                        lastMonth(12)
+                        item.switchToYearPressed(1)
+                        interval(1)
                     } else if (!signRectangle.visible){
                         item.showAddTextWindow()
                     }
@@ -178,10 +197,18 @@ Item {
     function getLunarDayText(index){
         if (((index + 1) > testNumber) && ((index - testNumber) < dateNumber)) {
             return T2.calendar.getLunartoDayIDayCn(lunarYear, lunarMonth, (index + 1 - testNumber))
+
         } else if (index < testNumber && lunarMonth > 1){
-            return T2.calendar.getLunartoDayEvery(lunarYear, (lunarMonth - 1), (index + dateNumber - testNumber))
+            return T2.calendar.getLunartoDayEvery(lunarYear, (lunarMonth - 1), (index + lunarLastMonthCalculation(lunarMonth - 1) - testNumber + 1))
+
         } else if ((index - testNumber + 1) > dateNumber && lunarMonth < 12){
             return T2.calendar.getLunartoDayEvery(lunarYear, (lunarMonth + 1), (index - dateNumber - testNumber + 1))
+
+        } else if (lunarMonth === 12 && (index - testNumber + 1) > dateNumber){
+            return T2.calendar.getLunartoDayEvery(lunarYear + 1, 1, (index - dateNumber - testNumber + 1))
+
+        } else if (choseMonth === 1 && (index < testNumber)){
+            return T2.calendar.getLunartoDayEvery(lunarYear - 1, 12, (index + dateNumber - testNumber + 1))
         } else {
             return "0000"
         }
@@ -234,6 +261,20 @@ Item {
         }
     }
 
+    function lunarLastMonthCalculation(number){
+        if (number === 2){
+            return (28 + runnianDate)
+        } else if (number % 2 === 1 && number <= 7){
+            return 31
+        } else if (number % 2 === 0 && number <= 7 && number !== 2){
+            return 30
+        } else if ((number + 1) % 2 === 1 && number > 7){
+            return 31
+        } else if ((number + 1) % 2 === 0 && number > 7){
+            return 30
+        }
+    }
+
     function interval(number){
         testNumber = yearTestNumber
 
@@ -245,7 +286,7 @@ Item {
             dateNumber = 30
         } else if ((number + 1) % 2 === 1 && number > 7){
             dateNumber = 31
-        } else if ((number + 1) % 2 === 2 && number > 7){
+        } else if ((number + 1) % 2 === 0 && number > 7){
             dateNumber = 30
         }
 
@@ -277,7 +318,7 @@ Item {
         }
     }
 
-    function yaerToDateCalculation(choseYear){
+    function yearToDateCalculation(choseYear){
         var yearDifferenceValue
         var dateDifferenceValue
         var temporaryDate

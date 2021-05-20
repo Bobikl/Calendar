@@ -2,21 +2,32 @@
 
 saveTheFile::saveTheFile()
 {
-
+    char szBuf[128];
+//    char szPath[128];
+//    memset(szPath, 0x00, sizeof (szPath));
+//    int ret = readlink("/proc/self/exe", szPath, sizeof (szPath) - 1);
+    memset(szBuf, 0x00, sizeof (szBuf));
+    getcwd(szBuf, sizeof(szBuf) - 1);
+    QString S(szBuf);
+    Path = S + "/file/";
+    QDir dir(Path);
+    if (!dir.exists()){
+        dir.mkdir(Path);
+    }
 }
 
-void saveTheFile::getInputText(QString Today, QString title, QString content)
+bool saveTheFile::getInputText(QString Today, QString title, QString content)
 {
     if (title == "" && content == "")
     {
-        return;
+        return false;
     } else {
         QString fileName = Today;
-        QFile file(PATH + fileName + ".txt");
+        QFile file(Path + fileName + ".txt");
         if (!file.open(QIODevice::WriteOnly))
         {
             qDebug() << "write error";
-            return;
+            return false;
         }
         QByteArray writeTitle = title.toLatin1();
         QByteArray writeContent = content.toLatin1();
@@ -24,14 +35,14 @@ void saveTheFile::getInputText(QString Today, QString title, QString content)
         file.write("\n");
         file.write(writeContent);
         file.close();
+        return true;
     }
-
 }
 
 bool saveTheFile::getFileName(QString year, QString month, QString date)
 {
     QString signDay = year + "-" + month + "-" + date;
-    QDir qd(PATH);
+    QDir qd(Path);
     QFileInfoList subFileList = qd.entryInfoList(QDir::Files | QDir::CaseSensitive);
     for (int i = 0; i < subFileList.size(); i++)
     {
@@ -49,7 +60,7 @@ bool saveTheFile::getFileName(QString year, QString month, QString date)
 
 int saveTheFile::getFileNameNumber()
 {
-    QDir pd(PATH);
+    QDir pd(Path);
     QFileInfoList subFileList = pd.entryInfoList(QDir::Files | QDir::CaseSensitive);
     return subFileList.size();
 }
@@ -57,11 +68,11 @@ int saveTheFile::getFileNameNumber()
 QString saveTheFile::outPutFileContent(QString year, QString month, QString date)
 {
     QString fileName = year + "-" + month + "-" + date;
-    QFile file(PATH + fileName + ".txt");
+    QFile file(Path + fileName + ".txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qDebug() << "File can not open";
-        return 0;
+        exit(100);
     }
     QString firstTitle;
     QString secondContent;
@@ -78,20 +89,17 @@ QString saveTheFile::outPutFileContent(QString year, QString month, QString date
         addNumber = 0;
         return secondContent;
     }
-    file.close();
 }
 
 void saveTheFile::deleteFile(QString choseDay)
 {
     QString FileName  = choseDay;
-//    QString FileName = "2021-5-1";
 
-    if (QFile::remove(PATH + FileName + ".txt"))
+    if (QFile::remove(Path + FileName + ".txt"))
     {
         qDebug() << "delete file secces";
     } else {
         qDebug() << "delete file error";
-        qDebug() << choseDay;
     }
 }
 
