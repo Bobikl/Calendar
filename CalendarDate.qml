@@ -98,7 +98,7 @@ Item {
                         item.switchToNextMonthPressed()
                         lastMonth(choseMonth + 1)
                         interval((choseMonth === 12) ? 12 : ++choseMonth)
-                    } else if (choseMonth === 1) {
+                    } else if (choseMonth === 1 && (index < testNumber)) {
                         lunarYear--
                         lunarMonth = 12
                         choseMonth = 12
@@ -107,7 +107,7 @@ Item {
                         lastMonth(1)
                         item.switchToYearPressed(0)
                         interval(12)
-                    } else if (choseMonth === 12) {
+                    } else if (choseMonth === 12 && (index - testNumber - dateNumber + 1) > 0) {
                         lunarYear++
                         lunarMonth = 1
                         choseMonth = 1
