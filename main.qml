@@ -1,13 +1,14 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.5
+import QtQuick.Controls 2.0
 import QtQml.Models 2.1
 import "lunar.js" as T1
 import FishUI 1.0 as FishUI
 
 FishUI.Window {
     id: root
-    width: 840
+    width: 840 + 280
     height: 700
     minimumWidth: 840
     minimumHeight: 700
@@ -68,12 +69,85 @@ FishUI.Window {
         }
     }
 
-    Notice {
-        id: notice
-        visible: false
-        width: 30
-        height: 30
+    Popup {
+        id: myPopup
+        width: 150
+        height: 0
+        modal: true
+        focus: true
+        dim: false
+        x: (root.width - myPopup.width) / 2
+        background: Rectangle{
+            anchors.fill: parent
+            radius: 5
+            color: "grey"
+            opacity: 0.8
+            Text {
+                id: popupText
+                anchors.centerIn: parent
+                text: "NULL"
+                clip: true
+            }
+        }
+        onOpened: {
+            popupCloseTime.start()
+            sequentialAnimationPopup.start()
+            myPopup.height = 0
+            myPopup.y = 0
+            myPopup.opacity = 1
+        }
+        onClosed: {
+            myPopup.height = 0
+            myPopup.y = 0
+            myPopup.opacity = 1
+        }
+
+        Timer {
+            id: popupCloseTime
+            interval: 1000
+            running: false
+            onTriggered: {
+                popupCloseAnimation.start()
+            }
+        }
+        ParallelAnimation {
+            id: sequentialAnimationPopup
+            running: false
+            PropertyAnimation {
+                id: popupOpenAnimationY
+                duration: 300
+                target: myPopup
+                property: "y"
+                from: 0
+                to: 10
+            }
+            PropertyAnimation {
+                id: popupOpenAnimationHeight
+                duration: 1000
+                target: myPopup
+                easing.type: Easing.OutCubic
+                property: "height"
+                from: 0
+                to: 40
+            }
+        }
+        PropertyAnimation {
+            id: popupCloseAnimation
+            duration: 300
+            running: false
+            target: myPopup
+            property: "opacity"
+            from: 1
+            to: 0
+            onStarted: {
+                popupCloseTime.stop()
+            }
+            onStopped: {
+                myPopup.close()
+            }
+        }
     }
+
 
     RowLayout {
         anchors.margins: FishUI.Units.smallSpacing
@@ -91,13 +165,12 @@ FishUI.Window {
                 Rectangle {
                     Layout.fillWidth: true
                 }
-
                 Rectangle {
                     Layout.fillWidth: true
                     height: 40
                     Text {
                         id: lunarTimeText
-                        font.pixelSize: 30
+                        font.pixelSize: 25
                         text: T1.calendar.getLunartoDay(getTodatYear(), getTodayMonth(), getTodayDate())
                     }
                 }
@@ -237,7 +310,7 @@ FishUI.Window {
         SideBorder{
             id: sideBorder
             Layout.fillHeight: true
-            width: 100
+            width: 280
             visible: false
         }
     }
@@ -254,7 +327,7 @@ FishUI.Window {
             calendarDate.addTextYear = Y
         }
         onAddSuccessOrFaile: {
-
+            noticeF(notice)
         }
         onDeleteFile: {
             calendarDate.interval(DM)
@@ -262,5 +335,9 @@ FishUI.Window {
             calendarDate.addTextMonth = -1000
             calendarDate.addTextYear = -100
         }
+    }
+    function noticeF(noticeText){
+        popupText.text = noticeText
+        myPopup.open()
     }
 }

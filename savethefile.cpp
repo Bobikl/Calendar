@@ -3,9 +3,6 @@
 saveTheFile::saveTheFile()
 {
     char szBuf[128];
-//    char szPath[128];
-//    memset(szPath, 0x00, sizeof (szPath));
-//    int ret = readlink("/proc/self/exe", szPath, sizeof (szPath) - 1);
     memset(szBuf, 0x00, sizeof (szBuf));
     getcwd(szBuf, sizeof(szBuf) - 1);
     QString S(szBuf);
@@ -91,15 +88,16 @@ QString saveTheFile::outPutFileContent(QString year, QString month, QString date
     }
 }
 
-void saveTheFile::deleteFile(QString choseDay)
+bool saveTheFile::deleteFile(QString choseDay)
 {
     QString FileName  = choseDay;
 
     if (QFile::remove(Path + FileName + ".txt"))
     {
-        qDebug() << "delete file secces";
+        return true;
     } else {
         qDebug() << "delete file error";
+        return false;
     }
 }
 
