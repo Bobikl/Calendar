@@ -20,6 +20,7 @@ public:
     Q_INVOKABLE int getFileNameNumber();
     Q_INVOKABLE QString outPutFileContent(QString year, QString month, QString date);
     Q_INVOKABLE bool deleteFile(QString choseDay);
+    Q_INVOKABLE QString sideBorderGetFile(int i);
 };
 
 #endif // SAVETHEFILE_H

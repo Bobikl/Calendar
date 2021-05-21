@@ -3,12 +3,13 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.5
 import QtQuick.Controls 2.0
 import QtQml.Models 2.1
+import CalendarSave 1.0
 import "lunar.js" as T1
 import FishUI 1.0 as FishUI
 
 FishUI.Window {
     id: root
-    width: 840 + 280
+    width: 840 + sideBorderWidth
     height: 700
     minimumWidth: 840
     minimumHeight: 700
@@ -22,9 +23,17 @@ FishUI.Window {
     }
 
     property int timeNumber: 0
+    property int sideBorderWidth: 0
 
     function timeRunning(){
         if (timer.running && timeNumber === 0){
+            if (saveTheFile.getFileNameNumber() === 0){
+                sideBorder.visible = false
+                sideBorderWidth = 0
+            } else {
+                sideBorder.visible = true
+                sideBorderWidth = 280
+            }
             calendarDate.yearToDateCalculation(getTodatYear())
             calendarDate.lunarYear = getTodatYear()
             calendarDate.lunarMonth = getTodayMonth()
@@ -41,6 +50,7 @@ FishUI.Window {
             calendarDate.choseMonth = calendarMonth.comboBoxMonthText
             calendarDate.choseYear = calendarMonth.comboBoxYearText
             addTextWindow.refreshChoseMonth = getTodayMonth()
+            sideBorder.appendContent()
             timeNumber++
         }
     }
@@ -56,6 +66,10 @@ FishUI.Window {
     }
     function getTodayDate() {
         return Qt.formatDateTime(new Date(), "dd");
+    }
+
+    SaveTheFile {
+        id: saveTheFile
     }
 
     Timer {
@@ -76,7 +90,7 @@ FishUI.Window {
         modal: true
         focus: true
         dim: false
-        x: (root.width - myPopup.width) / 2
+        x: (root.width - myPopup.width - sideBorderWidth) / 2
         background: Rectangle{
             anchors.fill: parent
             radius: 5
@@ -307,12 +321,18 @@ FishUI.Window {
                 }
             }
         }
-        SideBorder{
-            id: sideBorder
-            Layout.fillHeight: true
-            width: 280
-            visible: false
+        ColumnLayout {
+            Rectangle {
+                height:45
+            }
+            SideBorder{
+                id: sideBorder
+                Layout.fillHeight: true
+                width: 280
+                visible: false
+            }
         }
+
     }
 
     AddTextWindow {
@@ -325,15 +345,23 @@ FishUI.Window {
             calendarDate.addTextDate = D
             calendarDate.addTextMonth = M
             calendarDate.addTextYear = Y
+            sideBorder.deleteContent()
+            sideBorderWidth = 280
+            sideBorder.visible = true
         }
         onAddSuccessOrFaile: {
             noticeF(notice)
         }
         onDeleteFile: {
+            if (saveTheFile.getFileNameNumber() === 0){
+                sideBorder.visible = false
+                sideBorderWidth = 0
+            }
             calendarDate.interval(DM)
             calendarDate.addTextDate = -100
             calendarDate.addTextMonth = -1000
             calendarDate.addTextYear = -100
+            sideBorder.deleteContent()
         }
     }
     function noticeF(noticeText){

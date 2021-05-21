@@ -58,8 +58,18 @@ Item {
         model: gridViewModel()
         delegate: componentData
         clip: true
-        cellWidth: item.width / 7
-        cellHeight: item.height / 6
+//        cellWidth: item.width / 7
+        cellWidth: item.width * ( 1 / 7)
+//        cellHeight: item.height / 6
+        cellHeight: {
+            if (gridView.model === 28){
+                item.height / 4
+            } else if (gridView.model === 35){
+                item.height / 5
+            } else {
+                item.height / 6
+            }
+        }
 
         populate: Transition {
             NumberAnimation {

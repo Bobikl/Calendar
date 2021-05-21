@@ -77,7 +77,7 @@ QString saveTheFile::outPutFileContent(QString year, QString month, QString date
     while(!in.atEnd()){
         QString line = in.readAll();
         firstTitle = line.section("\n", 0, 0);
-        secondContent = line.section("\n", 1, 1);
+        secondContent = line.section("\n", 1, 100);
     }
     if (addNumber == 0){
         addNumber = 1;
@@ -101,6 +101,35 @@ bool saveTheFile::deleteFile(QString choseDay)
     }
 }
 
+QString saveTheFile::sideBorderGetFile(int i)
+{
+    QDir pd(Path);
+    QFileInfoList subFileList = pd.entryInfoList(QDir::Files | QDir::CaseSensitive);
+    QFile file(Path + subFileList[i].baseName() + ".txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "File can not open";
+        exit(100);
+    }
+    QString firstTitle;
+    QString secondContent;
+    QTextStream in(&file);
+    while(!in.atEnd()){
+        QString line = in.readAll();
+        firstTitle = line.section("\n", 0, 0);
+        secondContent = line.section("\n", 1, 1);
+    }
+    if (addNumber == 0){
+        addNumber = 1;
+        return firstTitle;
+    } else if (addNumber == 1){
+        addNumber = 2;
+        return secondContent;
+    } else if(addNumber == 2){
+        addNumber = 0;
+        return subFileList[i].baseName();
+    }
+}
 
 
 
