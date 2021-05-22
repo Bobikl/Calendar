@@ -305,17 +305,13 @@ FishUI.Window {
                 onShowAddTextWindow: {
                     addTextWindow.clearText()
                     addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
-                    addTextWindow.choseDateT = calendarDate.returnChoseDay
-                    addTextWindow.choseMonthT = calendarDate.choseMonth
-                    addTextWindow.choseYearT = calendarDate.choseYear
+                    addTextWindow.splitChoseDay()
                     addTextWindow.show()
                 }
                 onShowSaveSign: {
                     addTextWindow.clearText()
                     addTextWindow.getChoseDay = calendarDate.choseYear + "-" + calendarDate.choseMonth + "-" + calendarDate.returnChoseDay
-                    addTextWindow.choseDateT = calendarDate.returnChoseDay
-                    addTextWindow.choseMonthT = calendarDate.choseMonth
-                    addTextWindow.choseYearT = calendarDate.choseYear
+                    addTextWindow.splitChoseDay()
                     addTextWindow.showTitleAndContent(first, second)
                     addTextWindow.show()
                 }
@@ -330,17 +326,40 @@ FishUI.Window {
                 Layout.fillHeight: true
                 width: 280
                 visible: false
+                onLocationChoseLabel: {
+                    calendarDate.interval(month)
+                    calendarDate.lunarMonth = month
+                    calendarDate.lastMonth(month)
+                    calendarDate.choseMonth = month
+                    calendarDate.lunarYear = year
+                    calendarDate.yearToDateCalculation(year)
+                    calendarDate.choseYear = year
+                    calendarDate.comboBoxYearChose = year
+                    calendarMonth.comboBoxYearCurrentIndex = year - 2000
+                    calendarMonth.comboboxIndex = month
+                }
+                onShowLabelContent: {
+                    addTextWindow.getChoseDay = showDate
+                    addTextWindow.splitChoseDay()
+                    addTextWindow.showTitleAndContent(titleText, contentText)
+                    addTextWindow.show()
+                }
+                onDeleteLabel: {
+                    addTextWindow.getChoseDay = deleteDate
+                    addTextWindow.addTextWindowDelete()
+                }
             }
         }
-
     }
 
     AddTextWindow {
         id: addTextWindow
         width: 600
         height: 400
-        maximumWidth: 600
-        maximumHeight:400
+        maximumWidth: addTextWindow.width
+        maximumHeight: addTextWindow.height
+        minimumHeight: addTextWindow.height
+        minimumWidth: addTextWindow.width
         onSavePressed: {
             calendarDate.addTextDate = D
             calendarDate.addTextMonth = M
@@ -359,7 +378,7 @@ FishUI.Window {
             }
             calendarDate.interval(DM)
             calendarDate.addTextDate = -100
-            calendarDate.addTextMonth = -1000
+            calendarDate.addTextMonth = -100
             calendarDate.addTextYear = -100
             sideBorder.deleteContent()
         }

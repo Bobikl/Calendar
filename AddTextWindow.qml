@@ -122,16 +122,7 @@ Window {
                 visible: false
                 text: "删除事件"
                 onClicked: {
-                    if (saveTheFile.deleteFile(getChoseDay)){
-                        textWindow.addSuccessOrFaile("删除成功")
-                    } else {
-                        textWindow.addSuccessOrFaile("删除失败")
-                    }
-                    textWindow.deleteFile(refreshChoseYear, refreshChoseMonth, choseDateT)
-                    textInput.clear()
-                    textEdit.clear()
-                    deleteButton.visible = false
-                    addTextWindow.close()
+                    addTextWindowDelete()
                 }
             }
 
@@ -169,5 +160,23 @@ Window {
     function clearText(){
         textInput.clear()
         textEdit.clear()
+    }
+    function addTextWindowDelete(){
+        if (saveTheFile.deleteFile(getChoseDay)){
+            textWindow.addSuccessOrFaile("删除成功")
+        } else {
+            textWindow.addSuccessOrFaile("删除失败")
+        }
+        textWindow.deleteFile(refreshChoseYear, refreshChoseMonth, choseDateT)
+        textInput.clear()
+        textEdit.clear()
+        deleteButton.visible = false
+        addTextWindow.close()
+    }
+    function splitChoseDay(){
+        var splitVector = getChoseDay.split("-")
+        choseYearT = splitVector[0]
+        choseMonthT = splitVector[1]
+        choseDateT = splitVector[2]
     }
 }

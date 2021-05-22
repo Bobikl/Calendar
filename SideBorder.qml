@@ -1,8 +1,16 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.0
+import QtQuick.Controls 2.0
 import CalendarSave 1.0
 Item {
     id: item
+    property int titleYear: 0
+    property int titleMonth: 0
+    property var titleText
+    property var contentText
+    signal locationChoseLabel(int year, int month)
+    signal showLabelContent (var showDate)
+    signal deleteLabel (var deleteDate)
     SaveTheFile {
         id: saveTheFile
     }
@@ -25,6 +33,35 @@ Item {
             height: 100
             radius: 10
             border.color: "black"
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: {
+                    if (mouse.button === Qt.RightButton){
+                        contentMenu.popup()
+                    } else {
+                        splitTitle(dateText.text)
+                        item.locationChoseLabel(Number(titleYear), Number(titleMonth))
+                    }
+                }
+            }
+            Menu {
+                id: contentMenu
+                MenuItem {
+                    text: "查看"
+                    onTriggered: {
+                        titleText = textOne.text
+                        contentText = textTwo.text
+                        item.showLabelContent(dateText.text)
+                    }
+                }
+                MenuItem {
+                    text: "删除"
+                    onTriggered: {
+                        item.deleteLabel(dateText.text)
+                    }
+                }
+            }
             GridLayout {
                 anchors.fill: parent
                 anchors.leftMargin: 20
@@ -34,6 +71,7 @@ Item {
                     text: "日期"
                 }
                 Text {
+                    id: dateText
                     text: date
                 }
                 Text {
@@ -54,6 +92,7 @@ Item {
             }
         }
     }
+
     function appendContent(){
         for (var i = 0; i < saveTheFile.getFileNameNumber(); i++){
             model.append({"title": saveTheFile.sideBorderGetFile(i), "content": saveTheFile.sideBorderGetFile(i), "date": saveTheFile.sideBorderGetFile(i)})
@@ -64,5 +103,10 @@ Item {
         for (var i = 0; i < saveTheFile.getFileNameNumber(); i++){
             model.append({"title": saveTheFile.sideBorderGetFile(i), "content": saveTheFile.sideBorderGetFile(i), "date": saveTheFile.sideBorderGetFile(i)})
         }
+    }
+    function splitTitle(title){
+        var s = title.split("-")
+        titleYear = s[0]
+        titleMonth = s[1]
     }
 }
