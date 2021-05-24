@@ -5,7 +5,6 @@
 #include <QDir>
 #include <unistd.h>
 #include <string.h>
-#define PATH "/home/lbw/Desktop/Qt/build-Calendar-Desktop-Debug/file/"
 using namespace std;
 
 class saveTheFile : public QObject

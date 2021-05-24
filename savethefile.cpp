@@ -86,6 +86,7 @@ QString saveTheFile::outPutFileContent(QString year, QString month, QString date
         addNumber = 0;
         return secondContent;
     }
+    return 0;
 }
 
 bool saveTheFile::deleteFile(QString choseDay)
@@ -99,6 +100,7 @@ bool saveTheFile::deleteFile(QString choseDay)
         qDebug() << "delete file error";
         return false;
     }
+    return false;
 }
 
 QString saveTheFile::sideBorderGetFile(int i)
@@ -129,6 +131,7 @@ QString saveTheFile::sideBorderGetFile(int i)
         addNumber = 0;
         return subFileList[i].baseName();
     }
+    return 0;
 }
 
 

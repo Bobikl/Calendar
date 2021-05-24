@@ -21,38 +21,34 @@ FishUI.Window {
             timeRunning()
         }
     }
-
-    property int timeNumber: 0
     property int sideBorderWidth: 0
 
     function timeRunning(){
-        if (timer.running && timeNumber === 0){
-            if (saveTheFile.getFileNameNumber() === 0){
-                sideBorder.visible = false
-                sideBorderWidth = 0
-            } else {
-                sideBorder.visible = true
-                sideBorderWidth = 280
-            }
-            calendarDate.yearToDateCalculation(getTodatYear())
-            calendarDate.lunarYear = getTodatYear()
-            calendarDate.lunarMonth = getTodayMonth()
-            calendarDate.year = getTodatYear()
-            calendarDate.month = getTodayMonth()
-            calendarDate.date = getTodayDate()
-            calendarDate.comboBoxYearChose = getTodatYear()
-            var lastTimeMonth = getTodayMonth()
-            calendarDate.lastMonth(lastTimeMonth)
-            var initialNumber = getTodayMonth()
-            calendarMonth.comboboxIndex = Number(initialNumber)
-            calendarDate.interval(initialNumber)
-            calendarMonth.comboBoxYearCurrentIndex = getTodatYear() - 2000
-            calendarDate.choseMonth = calendarMonth.comboBoxMonthText
-            calendarDate.choseYear = calendarMonth.comboBoxYearText
-            addTextWindow.refreshChoseMonth = getTodayMonth()
-            sideBorder.appendContent()
-            timeNumber++
+        if (saveTheFile.getFileNameNumber() === 0){
+            sideBorder.visible = false
+            sideBorderWidth = 0
+        } else {
+            sideBorder.visible = true
+            sideBorderWidth = 280
         }
+        calendarDate.yearToDateCalculation(getTodatYear())
+        calendarDate.lunarYear = getTodatYear()
+        calendarDate.lunarMonth = getTodayMonth()
+        calendarDate.year = getTodatYear()
+        calendarDate.month = getTodayMonth()
+        calendarDate.date = getTodayDate()
+        calendarDate.comboBoxYearChose = getTodatYear()
+        var lastTimeMonth = getTodayMonth()
+        var initialNumber = getTodayMonth()
+        calendarDate.lastMonth(lastTimeMonth)
+        calendarMonth.comboboxIndex = Number(initialNumber)
+        calendarDate.interval(initialNumber)
+        calendarMonth.comboBoxYearCurrentIndex = getTodatYear() - 2000
+        calendarDate.choseMonth = calendarMonth.comboBoxMonthText
+        calendarDate.choseYear = calendarMonth.comboBoxYearText
+        addTextWindow.refreshChoseMonth = getTodayMonth()
+        sideBorder.appendContent()
+
     }
 
     function currentDateTime() {
