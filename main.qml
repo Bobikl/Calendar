@@ -14,7 +14,7 @@ FishUI.Window {
     minimumWidth: 840
     minimumHeight: 700
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("Calendar")
 
     QtObject{
         Component.onCompleted: {

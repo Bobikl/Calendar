@@ -58,9 +58,7 @@ Item {
         model: gridViewModel()
         delegate: componentData
         clip: true
-//        cellWidth: item.width / 7
         cellWidth: item.width * ( 1 / 7)
-//        cellHeight: item.height / 6
         cellHeight: {
             if (gridView.model === 28){
                 item.height / 4
