@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import "lunar.js" as T2
 import CalendarSave 1.0
+import InsertSql 1.0
 
 Item {
     id: item
@@ -50,6 +51,10 @@ Item {
 
     SaveTheFile {
         id: saveTheFileToDate
+    }
+
+    SqlLite {
+        id: sqlLite
     }
 
     GridView {
@@ -128,13 +133,14 @@ Item {
                         item.showAddTextWindow()
                     }
                     if (signRectangle.visible){
-                        for (var i = 0; i < 2; i++){
-                            if (i === 0){
-                                outTitle = saveTheFileToDate.outPutFileContent(choseYear, choseMonth, (index - testNumber + 1))
-                            } else {
-                                outContent = saveTheFileToDate.outPutFileContent(choseYear, choseMonth, (index - testNumber + 1))
-                            }
-                        }
+//                        for (var i = 0; i < 2; i++){
+//                            if (i === 0){
+//                                outTitle = saveTheFileToDate.outPutFileContent(choseYear, choseMonth, (index - testNumber + 1))
+//                            } else {
+//                                outContent = saveTheFileToDate.outPutFileContent(choseYear, choseMonth, (index - testNumber + 1))
+//                            }
+//                        }
+                        splitSign(sqlLite.outPutTitleContent(choseYear, choseMonth, (index - testNumber + 1)))
                         item.showSaveSign(outTitle, outContent)
                     }
                 }
@@ -178,6 +184,7 @@ Item {
                     Rectangle {
                         id: signRectangle
                         visible: signColor(index)
+//                        visible: false
                         radius: 50
                         width: 15
                         height: 15
@@ -193,7 +200,7 @@ Item {
     }
 
     function signColor(index){
-        if(saveTheFileToDate.getFileName(choseYear, choseMonth, (index - testNumber + 1)) || (addTextDate === (index - testNumber + 1)
+        if(sqlLite.findTable(choseYear, choseMonth, (index - testNumber + 1)) || (addTextDate === (index - testNumber + 1)
                                                                                               && addTextMonth === choseMonth
                                                                                               && addTextYear === choseYear)){
             return true
@@ -366,5 +373,10 @@ Item {
             yearTestNumber = 4
             runnianDate = 0
         }
+    }
+    function splitSign(titleAndContent){
+        var splitVector = titleAndContent.split("-")
+        outTitle = splitVector[0]
+        outContent = splitVector[1]
     }
 }

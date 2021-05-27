@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import CalendarSave 1.0
+import InsertSql 1.0
 Item {
     id: item
     property int titleYear: 0
@@ -93,11 +94,15 @@ Item {
         }
     }
 
+//    function appendContent(){
+//        for (var i = 0; i < saveTheFile.getFileNameNumber(); i++){
+//            model.append({"title": saveTheFile.sideBorderGetFile(i), "content": saveTheFile.sideBorderGetFile(i), "date": saveTheFile.sideBorderGetFile(i)})
+//        }
+//    }
     function appendContent(){
-        for (var i = 0; i < saveTheFile.getFileNameNumber(); i++){
-            model.append({"title": saveTheFile.sideBorderGetFile(i), "content": saveTheFile.sideBorderGetFile(i), "date": saveTheFile.sideBorderGetFile(i)})
-        }
+
     }
+
     function deleteContent(){
         model.clear()
         for (var i = 0; i < saveTheFile.getFileNameNumber(); i++){

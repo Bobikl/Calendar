@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.5
 import QtQuick.Controls 2.0
 import QtQml.Models 2.1
 import CalendarSave 1.0
+import InsertSql 1.0
 import "lunar.js" as T1
 import FishUI 1.0 as FishUI
 
@@ -16,8 +17,15 @@ FishUI.Window {
     visible: true
     title: qsTr("Calendar")
 
+//    Behavior on width {
+//        NumberAnimation {
+//            duration: 2000
+//        }
+//    }
+
     QtObject{
         Component.onCompleted: {
+            sqlLite.conectionSql()
             timeRunning()
         }
     }
@@ -48,7 +56,6 @@ FishUI.Window {
         calendarDate.choseYear = calendarMonth.comboBoxYearText
         addTextWindow.refreshChoseMonth = getTodayMonth()
         sideBorder.appendContent()
-
     }
 
     function currentDateTime() {
@@ -66,6 +73,10 @@ FishUI.Window {
 
     SaveTheFile {
         id: saveTheFile
+    }
+
+    SqlLite {
+        id: sqlLite
     }
 
     Timer {
