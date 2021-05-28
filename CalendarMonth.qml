@@ -197,5 +197,9 @@ Item {
         comboBoxMonthItemText.text = 1
         comboboxDate.currentIndex = 0
     }
+    function sidleOnclick(year, month){
+        comboBoxMonthItemText.text = month
+        comboboxYearText.text = year
+    }
 }
 

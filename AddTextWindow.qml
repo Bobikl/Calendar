@@ -352,6 +352,7 @@ Window {
         textEdit.clear()
     }
     function addTextWindowDelete(){
+        splitChoseDay()
         if (sqlLite.deleteTable(choseYearT, choseMonthT, choseDateT)){
             textWindow.addSuccessOrFaile("删除成功")
         } else {

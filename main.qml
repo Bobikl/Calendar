@@ -32,7 +32,7 @@ FishUI.Window {
     property int sideBorderWidth: 0
 
     function timeRunning(){
-        if (saveTheFile.getFileNameNumber() === 0){
+        if (sqlLite.getSqlSize() === 0){
             sideBorder.visible = false
             sideBorderWidth = 0
         } else {
@@ -342,8 +342,7 @@ FishUI.Window {
                     calendarDate.yearToDateCalculation(year)
                     calendarDate.choseYear = year
                     calendarDate.comboBoxYearChose = year
-                    calendarMonth.comboBoxYearCurrentIndex = year - 2000
-                    calendarMonth.comboboxIndex = month
+                    calendarMonth.sidleOnclick(year, month)
                 }
                 onShowLabelContent: {
                     addTextWindow.getChoseDay = showDate
@@ -379,7 +378,7 @@ FishUI.Window {
             noticeF(notice)
         }
         onDeleteFile: {
-            if (saveTheFile.getFileNameNumber() === 0){
+            if (sqlLite.getSqlSize() === 0){
                 sideBorder.visible = false
                 sideBorderWidth = 0
             }

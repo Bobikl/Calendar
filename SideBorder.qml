@@ -9,6 +9,7 @@ Item {
     property int titleMonth: 0
     property var titleText
     property var contentText
+    property int s: 0
     signal locationChoseLabel(int year, int month)
     signal showLabelContent (var showDate)
     signal deleteLabel (var deleteDate)
@@ -99,14 +100,27 @@ Item {
 //            model.append({"title": saveTheFile.sideBorderGetFile(i), "content": saveTheFile.sideBorderGetFile(i), "date": saveTheFile.sideBorderGetFile(i)})
 //        }
 //    }
-    function appendContent(){
 
+    function appendContent(){
+        s = sqlLite.getSqlSize() -1
+        if (s !== -1){
+            for (var i = 0; i <= s; i++){
+                var split = (sqlLite.slideInsert(i)).split("-")
+                var date = split[0] + "-" + split[1] + "-" + split[2]
+                model.append({"title": split[3], "content": split[4], "date": date})
+            }
+        }
     }
 
     function deleteContent(){
         model.clear()
-        for (var i = 0; i < saveTheFile.getFileNameNumber(); i++){
-            model.append({"title": saveTheFile.sideBorderGetFile(i), "content": saveTheFile.sideBorderGetFile(i), "date": saveTheFile.sideBorderGetFile(i)})
+        s = sqlLite.getSqlSize() -1
+        if (s !== -1){
+            for (var i = 0; i <= s; i++){
+                var split = (sqlLite.slideInsert(i)).split("-")
+                var date = split[0] + "-" + split[1] + "-" + split[2]
+                model.append({"title": split[3], "content": split[4], "date": date})
+            }
         }
     }
     function splitTitle(title){

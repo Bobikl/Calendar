@@ -27,7 +27,9 @@ void sqlLite::conectionSql()
             qDebug() << "Table create!";
         }
     }
-    forEachTable();
+
+//    forEachTable();
+//    getSqlSize();
     sql_query.clear();
 }
 
@@ -155,11 +157,11 @@ QString sqlLite::outPutTitleContent(int y, int m, int d)
     return title + "-" + content;
 }
 
-QString sqlLite::slideInsert()
+int sqlLite::getSqlSize()
 {
     QSqlQuery sql_query;
-    QString title;
-    QString content;
+    QString y;
+    QStringList sqlListSign;
     sql_query.exec(QString("select * from %1").arg(calendarTable));
     if(!sql_query.exec())
     {
@@ -169,11 +171,41 @@ QString sqlLite::slideInsert()
     {
         while(sql_query.next())
         {
-
-            title = sql_query.value(3).toString();
-            content = sql_query.value(4).toString();
+            y = sql_query.value(0).toString();
+            sqlListSign << y;
         }
     }
     sql_query.clear();
-    return title + "-" + content;
+    size = sqlListSign.size();
+    return size;
+}
+
+QString sqlLite::slideInsert(int i)
+{
+    QSqlQuery sql_query;
+    QString y;
+    QString m;
+    QString d;
+    QString title;
+    QString content;
+    QStringList sqlListSign;
+    sql_query.exec(QString("select * from %1").arg(calendarTable));
+    if(!sql_query.exec())
+    {
+        qDebug()<<sql_query.lastError();
+    }
+    else
+    {
+        while(sql_query.next())
+        {
+            y = sql_query.value(0).toString();
+            m = sql_query.value(1).toString();
+            d = sql_query.value(2).toString();
+            title = sql_query.value(3).toString();
+            content = sql_query.value(4).toString();
+            sqlListSign << y + "-" + m + "-" + d + "-" + title + "-" + content;
+        }
+    }
+    sql_query.clear();
+    return sqlListSign[i];
 }
