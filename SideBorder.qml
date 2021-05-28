@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
-import CalendarSave 1.0
 import InsertSql 1.0
 Item {
     id: item
@@ -13,9 +12,6 @@ Item {
     signal locationChoseLabel(int year, int month)
     signal showLabelContent (var showDate)
     signal deleteLabel (var deleteDate)
-    SaveTheFile {
-        id: saveTheFile
-    }
 
     ListView {
         spacing: 10
@@ -94,12 +90,6 @@ Item {
             }
         }
     }
-
-//    function appendContent(){
-//        for (var i = 0; i < saveTheFile.getFileNameNumber(); i++){
-//            model.append({"title": saveTheFile.sideBorderGetFile(i), "content": saveTheFile.sideBorderGetFile(i), "date": saveTheFile.sideBorderGetFile(i)})
-//        }
-//    }
 
     function appendContent(){
         s = sqlLite.getSqlSize() -1

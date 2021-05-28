@@ -8,7 +8,6 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        savethefile.cpp \
         sqllite.cpp
 
 RESOURCES += qml.qrc
@@ -25,6 +24,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    savethefile.h \
     sqllite.h
 

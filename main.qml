@@ -3,7 +3,6 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.5
 import QtQuick.Controls 2.0
 import QtQml.Models 2.1
-import CalendarSave 1.0
 import InsertSql 1.0
 import "lunar.js" as T1
 import FishUI 1.0 as FishUI
@@ -28,8 +27,11 @@ FishUI.Window {
             sqlLite.conectionSql()
             timeRunning()
         }
+        Component.onDestruction: {
+        }
     }
     property int sideBorderWidth: 0
+    property int time: 1000
 
     function timeRunning(){
         if (sqlLite.getSqlSize() === 0){
@@ -71,17 +73,13 @@ FishUI.Window {
         return Qt.formatDateTime(new Date(), "dd");
     }
 
-    SaveTheFile {
-        id: saveTheFile
-    }
-
     SqlLite {
         id: sqlLite
     }
 
     Timer {
         id: timer
-        interval: 100
+        interval: 1000
         running: true
         repeat: true
         triggeredOnStart: true
@@ -101,13 +99,14 @@ FishUI.Window {
         background: Rectangle{
             anchors.fill: parent
             radius: 5
-            color: "grey"
+            color: "lightGrey"
             opacity: 0.8
             Text {
                 id: popupText
                 anchors.centerIn: parent
                 text: "NULL"
                 clip: true
+                opacity: 0
             }
         }
         onOpened: {
@@ -121,11 +120,11 @@ FishUI.Window {
             myPopup.height = 0
             myPopup.y = 0
             myPopup.opacity = 1
+            popupText.opacity = 0
         }
-
         Timer {
             id: popupCloseTime
-            interval: 1000
+            interval: time
             running: false
             onTriggered: {
                 popupCloseAnimation.start()
@@ -136,15 +135,23 @@ FishUI.Window {
             running: false
             PropertyAnimation {
                 id: popupOpenAnimationY
-                duration: 300
+                duration: time
                 target: myPopup
                 property: "y"
                 from: 0
-                to: 10
+                to: 5
             }
             PropertyAnimation {
+                id: popupOpenAnimationText
+                duration: time * 0.5
+                target: popupText
+                property: "opacity"
+                to: 1.0
+            }
+
+            PropertyAnimation {
                 id: popupOpenAnimationHeight
-                duration: 1000
+                duration: time
                 target: myPopup
                 easing.type: Easing.OutCubic
                 property: "height"
@@ -175,25 +182,18 @@ FishUI.Window {
         anchors.fill: parent
         ColumnLayout {
             RowLayout {
-                Rectangle {
-                    Layout.fillWidth: true
-                    height: 40
-                    Text {
-                        id: timeText
-                        font.pixelSize: 30
-                    }
+                Text {
+                    id: timeText
+                    font.pixelSize: 25
                 }
                 Rectangle {
                     Layout.fillWidth: true
                 }
-                Rectangle {
-                    Layout.fillWidth: true
-                    height: 40
-                    Text {
-                        id: lunarTimeText
-                        font.pixelSize: 25
-                        text: T1.calendar.getLunartoDay(getTodatYear(), getTodayMonth(), getTodayDate())
-                    }
+
+                Text {
+                    id: lunarTimeText
+                    font.pixelSize: 25
+                    text: T1.calendar.getLunartoDay(getTodatYear(), getTodayMonth(), getTodayDate())
                 }
             }
 

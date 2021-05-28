@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import "lunar.js" as T2
-import CalendarSave 1.0
 import InsertSql 1.0
 
 Item {
@@ -49,10 +48,6 @@ Item {
     property var outTitle
     property var outContent
 
-    SaveTheFile {
-        id: saveTheFileToDate
-    }
-
     SqlLite {
         id: sqlLite
     }
@@ -93,12 +88,6 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
-//                onEntered: {
-//                    delegateRectangle.border.color = "white"
-//                }
-//                onExited: {
-//                    delegateRectangle.border.color = "white"
-//                }
                 onClicked: {
                     returnChoseDay = delegateRectangleText.text
                     if (index < testNumber && choseMonth !== 1){
@@ -133,13 +122,6 @@ Item {
                         item.showAddTextWindow()
                     }
                     if (signRectangle.visible){
-//                        for (var i = 0; i < 2; i++){
-//                            if (i === 0){
-//                                outTitle = saveTheFileToDate.outPutFileContent(choseYear, choseMonth, (index - testNumber + 1))
-//                            } else {
-//                                outContent = saveTheFileToDate.outPutFileContent(choseYear, choseMonth, (index - testNumber + 1))
-//                            }
-//                        }
                         splitSign(sqlLite.outPutTitleContent(choseYear, choseMonth, (index - testNumber + 1)))
                         item.showSaveSign(outTitle, outContent)
                     }
@@ -147,54 +129,33 @@ Item {
             }
             ColumnLayout {
                 anchors.fill: parent
-                RowLayout {
-                    Rectangle {
-                        Layout.fillWidth: true
-                    }
-                    Text {
-                        id: delegateRectangleText
-                        text: dateText(index)
-                        font.pixelSize: 25
-                        color: dateColor(index)
-                    }
-                    Rectangle {
-                        Layout.fillWidth: true
-                    }
+                Text {
+                    id: delegateRectangleText
+                    text: dateText(index)
+                    font.pixelSize: 25
+                    color: dateColor(index)
+                    Layout.alignment: Text.AlignHCenter
                 }
-
-                RowLayout {
-                    Rectangle {
-                        Layout.fillWidth: true
-                    }
-                    Text {
-                        id: lunarDayText
-                        text: getLunarDayText(index)
-                        font.pixelSize: 15
-                        color: dateColor(index)
-                    }
-                    Rectangle {
-                        Layout.fillWidth: true
-                    }
-
+                Text {
+                    id: lunarDayText
+                    text: getLunarDayText(index)
+                    font.pixelSize: 15
+                    color: dateColor(index)
+                    Layout.alignment: Text.AlignHCenter
                 }
-                RowLayout {
-                    Rectangle {
-                        Layout.fillWidth: true
-                    }
-                    Rectangle {
-                        id: signRectangle
-                        visible: signColor(index)
-//                        visible: false
-                        radius: 50
-                        width: 15
-                        height: 15
-                        color: "red"
-                    }
-                    Rectangle {
-                        Layout.fillWidth: true
-                    }
+                Rectangle {
+                    id: signRectangle
+                    visible: signColor(index)
+                    radius: 50
+                    width: 30
+                    height: 15
+                    color: "grey"
+                    Layout.alignment: Text.AlignHCenter
                 }
-
+                Rectangle {
+                    height: 15
+                    visible: !signColor(index)
+                }
             }
         }
     }
